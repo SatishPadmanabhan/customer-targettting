@@ -101,7 +101,7 @@ def preprocess_input_data(input_dict, categorical_features, model_feature_column
     # Apply one-hot encoding with drop_first=True, consistent with training
     df_processed = pd.get_dummies(df, columns=categorical_features, drop_first=True)
 
-    # Align columns with the model's expected features
+    # Align columns - essential for consistent feature set for the model
     # Create a DataFrame with all expected columns, initialized to 0
     aligned_df = pd.DataFrame(0, index=df_processed.index, columns=model_feature_columns)
 
@@ -127,7 +127,7 @@ model_feature_columns = (
      'MaritalStatus_Married', 'MaritalStatus_Single',
      'Passport_1',
      'OwnCar_1',
-     # Remaining 4 columns for 'Designation' to match 29 total features (8 numeric + 21 categorical dummies)
+     # These 4 columns for 'Designation' were derived to match the 29 total features from Xtrain_processed
      'Designation_Executive', 'Designation_Manager', 'Designation_Senior Manager', 'Designation_VP'
     ]
 )
