@@ -23,26 +23,26 @@ target = 'ProdTaken'
 # List of numerical features in the dataset
 numeric_features = [
     'Age',               # Customer's age
-    'DurationOfPitch',   # Number of years the customer has been with the bank
-    'NumberOfPersonVisiting', # Customer’s account balance
-    'PreferredPropertyStar',     # Number of products the customer has with the bank
-    'NumberOfTrips',         # Whether the customer has a credit card (binary: 0 or 1)
-    'PitchSatisfactionScore',    # Whether the customer is an active member (binary: 0 or 1)
-    'NumberOfChildrenVisiting',    # Customer’s estimated salary
+    'DurationOfPitch',   # Dueration of pitch
+    'NumberOfPersonVisiting', # No of people visiting
+    'PreferredPropertyStar',     # Preferred property rating
+    'NumberOfTrips',         # Number of trips
+    'PitchSatisfactionScore',    # Pitch satisfication
+    'NumberOfChildrenVisiting',    # Number of children visitng
     'MonthlyIncome'
 ]
 
 # List of categorical features in the dataset
 categorical_features = [
-    'TypeofContact',         # Country where the customer resides
-    'CityTier',
-    'Occupation',
-    'Gender',
-    'ProductPitched',
-    'MaritalStatus',
-    'Passport',
-    'OwnCar',
-    'Designation'
+    'TypeofContact',        # Type of contact
+    'CityTier',             # city Tore
+    'Occupation',           #occupation
+    'Gender',               # gender M/F
+    'ProductPitched',       # product pitched
+    'MaritalStatus',        # Marital status
+    'Passport',             # Passport status
+    'OwnCar',               # Own car status
+    'Designation'           # designation / seniority
 ]
 
 # Define predictor matrix (X) using selected numeric and categorical features
