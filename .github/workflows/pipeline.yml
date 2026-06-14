@@ -1,0 +1,62 @@
+name: Tourism Project Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Automatically triggers on push to the main branch
+
+jobs:
+
+  register-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r tourism_project_updated/requirements.txt
+      - name: Upload Dataset to Hugging Face Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python tourism_project_updated/model_building/data_register.py # This script now uses 'satishp0879/tourism-customer-dataset'
+
+  data-prep:
+    needs: register-dataset
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r tourism_project_updated/requirements.txt
+      - name: Run Data Preparation
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python tourism_project_updated/model_building/prep.py # This script now uses 'satishp0879/tourism-customer-dataset'
+
+
+  model-traning:
+    needs: data-prep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r tourism_project_updated/requirements.txt
+      - name: Start MLflow Server
+        run: |
+          nohup mlflow ui --host 0.0.0.0 --port 5000 &
+          sleep 5
+      - name: Model Building
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          MLFLOW_TRACKING_URI: http://localhost:5000
+        run: python tourism_project_updated/model_building/train.py # This script now uploads model to 'satishp0879/tourism-customer-model'
+
+
+  deploy-hosting:
+    runs-on: ubuntu-latest
+    needs: [model-traning,data-prep,register-dataset]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install -r tourism_project_updated/requirements.txt
+      - name: Push files to Frontend Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python tourism_project_updated/deployment/hosting.py # This script still uses 'satishp0879/Tourism-Customer-targetting' for the Space
